@@ -1,6 +1,8 @@
 #include <iostream>
 using namespace std;
 #include <process.h>
+#include <conio.h>
+#include <stdio.h>
 #include <fstream>
 
 class item
@@ -12,7 +14,7 @@ class item
 public:
     void getdata()
     {
-        system("clr");
+        //system("clr");
         cout << "\nPlease Enter the Item No.:\t";
         cin >> itemno;
         cout << "\nPlease Enter the Name.:\t";
@@ -20,19 +22,23 @@ public:
         gets(itemname);
         cout << "\nPlease Enter the price:\t";
         cin >> price;
-        cout << "\nPlease Enter the price:\t";
+        cout << "\nPlease Enter the Discount:\t";
         cin >> dis;
     }
 
     void showdata()
     {
-        system("clr");
-        cout << "\nThe item no.: " << itemno;
+cout << "\nThe item no.: " << itemno;
         cout << "\nThe name of item: " << itemname;
         cout << "\nThe price of item:  " << price;
         cout << "\nThe discount: " << dis;
+       
     }
-
+    
+    void select_show()
+    {
+         cout << itemno << "\t\t\t" << itemname << "\t\t" << price << "\t\t" << dis;
+    }
     int retitemno()
     {
         return itemno;
@@ -69,15 +75,18 @@ void write_to_file()
 
 void disp_all()
 {
-    system("cls");
-    cout << "\n\n\\t\tDISPLAY ALL RECORD...!!\n\n";
+
+    cout << "\n\n\tDISPLAY ALL RECORD...!!\n\n";
     f.open("store.dat", ios::in);
+    cout << "\nItem no.\t\tName\t\tPrice\t\tDiscount\n";
+    cout << "**************************************************************************";
     while (f.read((char *)&i, sizeof(i)))
     {
-        i.showdata();
-        cout << "\n\n******************************************\n";
+        cout << "\n";
+        i.select_show();
     }
     f.close();
+    getch();
 }
 
 void display_sp(int n)
@@ -86,7 +95,7 @@ void display_sp(int n)
     f.open("store.dat", ios::in);
     while (i.retitemno() == n)
     {
-        system("cls");
+         system("cls");
         i.showdata();
         flag = 1;
     }
@@ -95,12 +104,13 @@ void display_sp(int n)
     {
         cout << "\n\n Record dose not exit...";
     }
+    getch();
 }
 
 void modify()
 {
     int no, found = 0;
-    system("cls");
+   
     cout << "\n\nTo Modify";
     cout << "\n\nplease Enter the item no: ";
     cin >> no;
@@ -110,8 +120,8 @@ void modify()
         if (i.retitemno() == no)
         {
             i.showdata();
-            system("cls");
-            cout << "Please Enter tthe new details of the item: " << endl;
+            
+            cout << "\n\nPlease Enter the new details of the item: " << endl;
             i.getdata();
             int pos = -1 * ((int)sizeof(i));
             f.seekp(pos, ios::cur);
@@ -155,7 +165,7 @@ void delectrec()
 void menu()
 {
     system("cls");
-    f.open( "store.dat", ios::in);
+    f.open("store.dat", ios::in);
     if (!f)
     {
         cout << "ERROR!!! FILE COULD NOT BE OPEN\n\n\nGo to admin menu and create file..";
@@ -163,17 +173,17 @@ void menu()
     }
     cout << "\n\n\n\tItem Menu\n\n";
     cout << "==============================================================";
-    cout << "ITEM.NO.\t\tNAME\t\tPRICE\n";
-    cout << "==============================================================";
+    cout << "\nITEM.NO.\t\tNAME\t\tPRICE\n";
+    cout << "==============================================================\n";
     while (f.read((char *)&i, sizeof(i)))
     {
-        cout << i.retitemno() << "\t\t" << i.retitemname() << "\t\t" << i.retprice() << endl;
+        cout << i.retitemno() << "\t\t\t" << i.retitemname() << "\t\t" << i.retprice() << endl;
     }
     f.close();
 }
 void order_place()
 {
-    system("cls");
+     system("cls");
     int order_array[50], quen[50], c = 0;
     float amt, damt, total = 0;
     char ch = 'Y';
@@ -191,9 +201,9 @@ void order_place()
         c++;
         cout << "Do You want to order another? (y/n): ";
         cin >> ch;
-    } while (ch == 'y' ||ch == 'Y');
-    cout << "Thank you for placeing the order";
-    system("cls");
+    } while (ch == 'y' || ch == 'Y');
+    cout << "\nThank you for placeing the order\n";
+   
     cout << "**************INVOICE****************";
     cout << "\nItem no. \tName \tQuantity \tPrice \tAmount \tAmount after Discount\n";
     for (int x = 0; x <= c; x++)
@@ -233,7 +243,7 @@ void admin_menu()
     switch (ch2)
     {
     case '1':
-        system("cls");
+
         write_to_file();
         break;
     case '2':
@@ -241,7 +251,7 @@ void admin_menu()
         break;
     case '3':
         int num;
-        system("cls");
+        
         cout << "please Enter the Item No.: ";
         cin >> num;
         display_sp(num);
@@ -258,7 +268,7 @@ void admin_menu()
 
     default:
         cout << "\a";
-        admin_menu();
+
         break;
     }
 }
